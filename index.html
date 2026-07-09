@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP - M4</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script defer src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
+
+    <script defer type="module" src="./assets/js/script.js"></script>
+</head>
+
+<body>
+
+    <header class="py-3">
+        <h1 class="text-center">App Task Flow - Gestión de Tareas</h1>
+    </header>
+
+    <main class="container">
+
+        <section>
+            <h2>Crea tus tareas...</h2>
+
+            <form id="form-add-tarea">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="descripcion"
+                        placeholder="Ingresa la descripción de la tarea..." required>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-primary" id="btn-crear-tarea">
+
+                    <button class="btn btn-primary d-none" type="button" disabled id="btn-crear-tarea-spinner">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span role="status">Creando tarea...</span>
+                    </button>
+                </div>
+            </form>
+
+        </section>
+
+        <section class="py-3">
+            <h2 class="text-center">Lista de tareas</h2>
+
+            <div>
+                <table class="table" id="tabla-tareas">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla" class="d-none">
+                        <!-- AQUÍ SE AGREGAN LAS FILAS DE FORMA DINÁMICA` -->
+                    </tbody>
+
+                    <tbody class="placeholder-glow" id="cuerpo-tabla-placeholder">
+                        <tr>
+                            <td><span class="placeholder col-5"></span></td>
+                            <td><span class="placeholder col-11"></span></td>
+                            <td><span class="placeholder col-7 bg-secondary"></span></td>
+                            <td><span class="placeholder col-8"></span></td>
+                            <td>
+                                <a href="#" tabindex="-1" class="btn btn-sm btn-warning disabled placeholder col-4"></a>
+                                <a href="#" tabindex="-1" class="btn btn-sm btn-danger disabled placeholder col-4"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>
