@@ -1,87 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABP - M4</title>
-
+    <title>TaskFlow - Gestor de tareas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-
-    <script defer src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
-
     <script defer type="module" src="./assets/js/script.js"></script>
 </head>
-
 <body>
+    <header class="app-header">
+        <div class="container-fluid app-shell">
+            <div class="brand-block">
+                <span class="brand-icon" aria-hidden="true"><i class="bi bi-kanban-fill"></i></span>
+                <div>
+                    <h1>TaskFlow</h1>
+                    <p>Gestor de tareas</p>
+                </div>
+            </div>
 
-    <header class="py-3">
-        <h1 class="text-center">App Task Flow - Gestión de Tareas</h1>
+            <div class="project-progress" aria-live="polite">
+                <div class="progress-copy">
+                    <strong id="porcentaje-progreso">0% completado</strong>
+                    <span id="resumen-progreso">0 de 0 tareas terminadas</span>
+                </div>
+                <div class="progress" role="progressbar" aria-label="Progreso general" aria-valuemin="0"
+                    aria-valuemax="100" aria-valuenow="0">
+                    <div id="barra-progreso" class="progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
     </header>
 
-    <main class="container">
+    <main class="container-fluid app-shell main-content">
+        <section class="toolbar" aria-label="Herramientas del tablero">
+            <div class="search-control">
+                <label for="buscador" class="visually-hidden">Buscar tareas</label>
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="search" id="buscador" class="form-control" placeholder="Buscar tareas...">
+            </div>
 
-        <section>
-            <h2>Crea tus tareas...</h2>
-
-            <form id="form-add-tarea">
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="descripcion"
-                        placeholder="Ingresa la descripción de la tarea..." required>
+            <div class="toolbar-filters">
+                <div>
+                    <label for="filtro-estado" class="visually-hidden">Filtrar por estado</label>
+                    <select id="filtro-estado" class="form-select" aria-label="Filtrar por estado">
+                        <option value="all">Todos los estados</option>
+                        <option value="todo">POR HACER</option>
+                        <option value="doing">HACIENDO</option>
+                        <option value="verifying">POR VERIFICAR</option>
+                        <option value="done">HECHO</option>
+                    </select>
                 </div>
                 <div>
-                    <input type="submit" class="btn btn-primary" id="btn-crear-tarea">
-
-                    <button class="btn btn-primary d-none" type="button" disabled id="btn-crear-tarea-spinner">
-                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                        <span role="status">Creando tarea...</span>
-                    </button>
+                    <label for="filtro-prioridad" class="visually-hidden">Filtrar por prioridad</label>
+                    <select id="filtro-prioridad" class="form-select" aria-label="Filtrar por prioridad">
+                        <option value="all">Todas las prioridades</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                        <option value="low">Baja</option>
+                    </select>
                 </div>
-            </form>
+            </div>
 
-        </section>
-
-        <section class="py-3">
-            <h2 class="text-center">Lista de tareas</h2>
-
-            <div>
-                <table class="table" id="tabla-tareas">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Fecha creación</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-tabla" class="d-none">
-                        <!-- AQUÍ SE AGREGAN LAS FILAS DE FORMA DINÁMICA` -->
-                    </tbody>
-
-                    <tbody class="placeholder-glow" id="cuerpo-tabla-placeholder">
-                        <tr>
-                            <td><span class="placeholder col-5"></span></td>
-                            <td><span class="placeholder col-11"></span></td>
-                            <td><span class="placeholder col-7 bg-secondary"></span></td>
-                            <td><span class="placeholder col-8"></span></td>
-                            <td>
-                                <a href="#" tabindex="-1" class="btn btn-sm btn-warning disabled placeholder col-4"></a>
-                                <a href="#" tabindex="-1" class="btn btn-sm btn-danger disabled placeholder col-4"></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+            <div class="toolbar-actions">
+                <button type="button" id="btn-cargar-api" class="btn btn-outline-secondary">
+                    <i class="bi bi-cloud-download" aria-hidden="true"></i> Cargar tareas de ejemplo
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#modal-tarea" data-action="new-task">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva tarea
+                </button>
             </div>
         </section>
+
+        <section id="tablero-kanban" class="kanban-board" aria-label="Tablero Kanban"></section>
     </main>
 
-</body>
+    <div class="modal fade" id="modal-tarea" tabindex="-1" aria-labelledby="modal-tarea-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-eyebrow">TaskFlow</span>
+                        <h2 class="modal-title fs-5" id="modal-tarea-titulo">Nueva tarea</h2>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form id="form-tarea" novalidate>
+                    <div class="modal-body">
+                        <div id="error-formulario" class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion"
+                                maxlength="160" placeholder="Ej.: Revisar propuesta del proyecto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha-limite" class="form-label">Fecha límite</label>
+                            <input type="datetime-local" class="form-control" id="fecha-limite" name="fechaLimite">
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="estado-tarea" class="form-label">Estado</label>
+                                <select id="estado-tarea" name="estado" class="form-select">
+                                    <option value="todo">POR HACER</option>
+                                    <option value="doing">HACIENDO</option>
+                                    <option value="verifying">POR VERIFICAR</option>
+                                    <option value="done">HECHO</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="prioridad-tarea" class="form-label">Prioridad</label>
+                                <select id="prioridad-tarea" name="prioridad" class="form-select">
+                                    <option value="high">Alta</option>
+                                    <option value="medium" selected>Media</option>
+                                    <option value="low">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="btn-guardar-tarea" class="btn btn-primary">
+                            <span class="button-label">Guardar tarea</span>
+                            <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <div class="toast-container position-fixed top-0 end-0 p-3" aria-live="polite" aria-atomic="true">
+        <div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true">
+            <div class="toast-header">
+                <span id="toast-indicator" class="toast-indicator" aria-hidden="true"></span>
+                <strong class="me-auto">TaskFlow</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+            <div id="toast-mensaje" class="toast-body"></div>
+        </div>
+    </div>
+</body>
 </html>
