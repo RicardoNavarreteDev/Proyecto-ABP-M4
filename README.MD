@@ -4,11 +4,6 @@ TaskFlow es una aplicación web de gestión de tareas basada en un tablero Kanba
 
 El proyecto fue desarrollado con JavaScript moderno, orientación a objetos y manipulación dinámica y segura del DOM.
 
-## Demo
-
-[Ver TaskFlow en GitHub Pages](https://ricardonavarretedev.github.io/Proyecto-ABP-M4/)
-
-> La publicación utiliza la rama `main` y no necesita un proceso de compilación.
 
 ## Vista general
 
